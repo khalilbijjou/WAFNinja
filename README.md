@@ -1,24 +1,18 @@
 # WAFNinja
 
+	    WAFNinja - Penetration testers favorite for WAF Bypassing
+
+
 WAFNinja is a CLI tool written in Python. It shall help penetration testers to bypass a WAF by
 automating steps necessary for bypassing input validation. The tool was created with the objective
 to be easily extendible, simple to use and usable in a team environment. Many payloads and
-fuzzing strings, which are stored in a local database file, come shipped with the tool. WAFNinja
+fuzzing strings, which are stored in a local database file come shipped with the tool. WAFNinja
 supports HTTP connections, GET and POST requests and the use of Cookies in order to access
 pages restricted to authenticated users.
 
 usage: wafninja.py [-h] [-v]
                    {fuzz,bypass,insert-fuzz,insert-bypass,set-db} ...
 
-    
-___       ______________________   ______       ________        
-__ |     / /__    |__  ____/__  | / /__(_)____________(_)_____ _
-__ | /| / /__  /| |_  /_   __   |/ /__  /__  __ \____  /_  __ `/
-__ |/ |/ / _  ___ |  __/   _  /|  / _  / _  / / /___  / / /_/ / 
-____/|__/  /_/  |_/_/      /_/ |_/  /_/  /_/ /_/___  /  \__,_/  
-                                                /___/           
-                                                
-    WAFNinja - Penetration testers favorite for WAF Bypassing
     
 Example Usage:
 fuzz:

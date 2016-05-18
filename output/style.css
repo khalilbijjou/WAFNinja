@@ -1,0 +1,105 @@
+.OutputTable {
+	margin:0px;padding:0px;
+	width:100%;
+	border:1px solid #000000;
+	
+	-moz-border-radius-bottomleft:10px;
+	-webkit-border-bottom-left-radius:10px;
+	border-bottom-left-radius:10px;
+	
+	-moz-border-radius-bottomright:10px;
+	-webkit-border-bottom-right-radius:10px;
+	border-bottom-right-radius:10px;
+	
+	-moz-border-radius-topright:10px;
+	-webkit-border-top-right-radius:10px;
+	border-top-right-radius:10px;
+	
+	-moz-border-radius-topleft:10px;
+	-webkit-border-top-left-radius:10px;
+	border-top-left-radius:10px;
+	table-layout: fixed;
+}.OutputTable table{
+    border-collapse: collapse;
+        border-spacing: 0;
+	width:310px;
+	height:100%;
+	margin:0px;padding:0px;
+}.OutputTable tr:last-child td:last-child {
+	-moz-border-radius-bottomright:10px;
+	-webkit-border-bottom-right-radius:10px;
+	border-bottom-right-radius:10px;
+}
+.OutputTable table tr:first-child td:first-child {
+	-moz-border-radius-topleft:10px;
+	-webkit-border-top-left-radius:10px;
+	border-top-left-radius:10px;
+}
+.OutputTable table tr:first-child td:last-child {
+	-moz-border-radius-topright:10px;
+	-webkit-border-top-right-radius:10px;
+	border-top-right-radius:10px;
+}.OutputTable tr:last-child td:first-child{
+	-moz-border-radius-bottomleft:10px;
+	-webkit-border-bottom-left-radius:10px;
+	border-bottom-left-radius:10px;
+}.OutputTable tr:hover td{
+	background-color:#ffffff;
+}
+.OutputTable td{
+	vertical-align:middle;
+	background-color:#ffffff;
+	width:500px; 
+	word-wrap: break-word;
+    height: 15px;
+	border:1px solid #000000;
+	border-width:0px 1px 1px 0px;
+	text-align:center;
+	padding:9px;
+	font-size:15px;
+	font-family:Helvetica;
+	font-weight:normal;
+	color:#000000;
+}.OutputTable tr:last-child td{
+	border-width:0px 1px 0px 0px;
+}.OutputTable tr td:last-child{
+	border-width:0px 0px 1px 0px;
+}.OutputTable tr:last-child td:last-child{
+	border-width:0px 0px 0px 0px;
+}
+.OutputTable tr:first-child th{
+		background:-o-linear-gradient(bottom, #007fff 5%, #007fff 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #007fff), color-stop(1, #007fff) );
+	background:-moz-linear-gradient( center top, #007fff 5%, #007fff 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#007fff", endColorstr="#007fff");	background: -o-linear-gradient(top,#007fff,007fff);
+
+	background-color:#007fff;
+	border:0px solid #000000;
+	text-align:center;
+	border-width:0px 0px 1px 1px;
+	font-size:15px;
+	font-family:Courier;
+	font-weight:bold;
+	color:#ffffff;
+}
+.OutputTable tr:first-child:hover td{
+	background:-o-linear-gradient(bottom, #007fff 5%, #007fff 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #007fff), color-stop(1, #007fff) );
+	background:-moz-linear-gradient( center top, #007fff 5%, #007fff 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#007fff", endColorstr="#007fff");	background: -o-linear-gradient(top,#007fff,007fff);
+
+	background-color:#007fff;
+}
+.OutputTable tr:first-child td:first-child{
+	border-width:0px 0px 1px 0px;
+}
+.OutputTable tr:first-child td:last-child{
+	border-width:0px 0px 1px 1px;
+}
+.OutputTable td.Yes{
+	background-color:#00FF00;
+}
+.OutputTable td.No{
+	background-color:#FF0000;
+}
+.OutputTable td.Probably{
+	background-color:#00CCFF;
+}

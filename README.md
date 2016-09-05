@@ -8,7 +8,7 @@ automating steps necessary for bypassing input validation. The tool was created 
 to be easily extendible, simple to use and usable in a team environment. Many payloads and
 fuzzing strings, which are stored in a local database file come shipped with the tool. WAFNinja
 supports HTTP connections, GET and POST requests and the use of Cookies in order to access
-pages restricted to authenticated users.
+pages restricted to authenticated users. Also an intercepting proxy can be set up.
 
 usage: wafninja.py [-h] [-v]
                    {fuzz,bypass,insert-fuzz,insert-bypass,set-db} ...

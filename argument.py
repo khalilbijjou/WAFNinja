@@ -51,6 +51,9 @@ insert-fuzz:\n\tpython wafninja.py insert-fuzz -i select -e select -t sql
     attack_payload_parser.add_argument('-d',metavar='DELAY',default='0',help="Wait the given delay time between each request [default=0]",required=False)
     attack_payload_parser.add_argument('-w',metavar='WAF',help='Send payloads of certain WAF [default=generic]', required=False)
     attack_payload_parser.add_argument('-o',metavar='OUTPUT FILE',help="Save output to .html file",required=False)
+    attack_payload_parser.add_argument('--proxy',metavar='PROXY',help='Use a proxy. Format: IP:PORT', required=False)
+    attack_payload_parser.add_argument('--prefix',metavar='PROXY',help='Add a prefix to every payload.', required=False)
+    attack_payload_parser.add_argument('--postfix',metavar='PROXY',help='Add a postfix to every payload.', required=False)
     
     ## attack fuzz ##
     attack_fuzz_parser.add_argument('-u',metavar='URL',help='Target URL (e.g. "www.target.com/index.php?id=FUZZ")\nNote: specify the position of the fuzz with the keyword FUZZ',required=True)
@@ -59,6 +62,9 @@ insert-fuzz:\n\tpython wafninja.py insert-fuzz -i select -e select -t sql
     attack_fuzz_parser.add_argument('-t',metavar='TYPE',choices=['sql','xss'],help='Type of payload [sql|xss]', required=True)
     attack_fuzz_parser.add_argument('-d',metavar='DELAY',default=0,help="Wait the given delay time between each request [default=0]",required=False)
     attack_fuzz_parser.add_argument('-o',metavar='OUTPUT FILE',help="Save output to .html file",required=False)
+    attack_fuzz_parser.add_argument('--proxy',metavar='PROXY',help='Use a proxy. Format: IP:PORT', required=False)
+    attack_fuzz_parser.add_argument('--prefix',metavar='PROXY',help='Add a prefix to every fuzz.', required=False)
+    attack_fuzz_parser.add_argument('--postfix',metavar='PROXY',help='Add a postfix to every fuzz.', required=False)
     
     ## insert bypass parser ##
     insert_bypass_parser.add_argument('-i',metavar='INPUT',help='Payload to insert',required=True)
@@ -86,7 +92,16 @@ insert-fuzz:\n\tpython wafninja.py insert-fuzz -i select -e select -t sql
         if waf is not None:
             waf = waf.lower()
         outputFile = args.o
-        return ['bypass', url, post, cookie, type, delay, waf, outputFile]
+        proxy = args.proxy
+        if proxy is None:
+            proxy = ''
+        prefix = args.prefix
+        if prefix is None:
+            prefix = ''
+        postfix = args.postfix
+        if postfix is None:
+            postfix = ''
+        return ['bypass', url, post, cookie, type, delay, waf, outputFile, proxy, prefix, postfix]
     
     elif args.mode == 'fuzz':
         url = args.u
@@ -95,7 +110,16 @@ insert-fuzz:\n\tpython wafninja.py insert-fuzz -i select -e select -t sql
         type = args.t.lower()
         delay = args.d
         outputFile = args.o
-        return ['fuzz', url, post, cookie, type, delay, outputFile] 
+        proxy = args.proxy
+        if proxy is None:
+            proxy = ''
+        prefix = args.prefix
+        if prefix is None:
+            prefix = ''
+        postfix = args.postfix
+        if postfix is None:
+            postfix = ''
+        return ['fuzz', url, post, cookie, type, delay, outputFile, proxy, prefix, postfix] 
     
     elif args.mode == 'insert-bypass':
         input = args.i

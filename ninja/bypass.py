@@ -12,14 +12,16 @@
                   
 """
 
+import copy
+from prettytable import PrettyTable
+from progressbar import *
+import ssl
+import codecs
+from time import sleep
 import urllib
 import urllib2
-import copy
-from time import sleep
-from progressbar import *
-from prettytable import PrettyTable
 
-def firePayload(type, payloads, url, params, header, delay, outputFile):
+def firePayload(type, payloads, url, params, header, delay, outputFile, proxy, prefix, postfix):
     """
         :Description: This function iterates through a list of payloads retrieved from the database, sends them to the target site and displays a progress bar of this process.
 
@@ -59,40 +61,51 @@ ____/|__/  /_/  |_/_/      /_/ |_/  /_/  /_/ /_/___  /  \__,_/
 WAFNinja - Penetration testers favorite for WAF Bypassing
     '''
     pbar = ProgressBar(widgets=[SimpleProgress(), ' Payloads sent!    ', Percentage(), Bar()])
-    opener = urllib2.build_opener()
+    if proxy is not '':
+        httpProxy = urllib2.ProxyHandler({'http': proxy, 'https': proxy})
+        ctx = ssl.create_default_context()
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+        opener = urllib2.build_opener(urllib2.HTTPSHandler(context=ctx), httpProxy)
+        urllib2.install_opener(opener)
+    else:
+        opener = urllib2.build_opener()
+    opener.addheaders = [('User-Agent', 'Mozilla/5.0')]
     for h in header:
         opener.addheaders.append(h)
-    result = []
+    result = []   
     
     for payload in pbar(payloads): # set the Payload
+        payload = prefix + payload + postfix
+        payload_enc = payload.encode('utf-8')
         try:
             sleep(float(delay))
             if params is None: # GET parameter           
-                url_with_payload = insertPayload(url, payload)
+                url_with_payload = insertPayload(url, payload_enc)
                 response = opener.open(url_with_payload)
             else: # POST parameter  
-                params_with_payload = setParams(params, payload) 
+                params_with_payload = setParams(params, payload_enc) 
                 response = opener.open(url, urllib.urlencode(params_with_payload))
             content = response.read()
-            occurence = content.find(payload)
+            occurence = content.find(payload_enc)
             result.append({
-                'payload' : payload,  
-                'httpCode' : response.getcode(), 
-                'contentLength': response.headers['content-length'], 
-                'output' : content[occurence:occurence+len(payload)]})  # take string from occurence to occurence+len(expected)
+                          'payload': payload_enc, 
+                          'httpCode': response.getcode(), 
+                          'contentLength': len(content),
+                          'output': content[occurence:occurence + len(payload_enc)]})  # take string from occurence to occurence+len(expected)
         except urllib2.HTTPError, error: # HTTP Status != 200
             if error.code == 404:
                 print 'ERROR: Target URL not reachable!'
                 sys.exit()
             else: # HTTP Status != 404
                 result.append({
-                    'payload' : payload, 
-                    'httpCode' : error.code, 
-                    'contentLength': '-', 
-                    'output' : '-'}) 
-    showOutput(type, result, outputFile)  
+                              'payload': payload_enc, 
+                              'httpCode': error.code, 
+                              'contentLength': '-', 
+                              'output': '-'}) 
+    showOutput(type, url, result, outputFile, delay, proxy, prefix, postfix)  
             
-def showOutput(type, result, outputFile):
+def showOutput(type, url, result, outputFile, delay, proxy, prefix, postfix):
     """
         :Description: This function prints the result of the firePayload() function in a nice fashion 
 
@@ -107,7 +120,6 @@ def showOutput(type, result, outputFile):
         
         :note: Saves the output in a HTML file or prints the output directly in the CLI.
     """
-
     if type == 'xss':
         table = PrettyTable(['Payload', 'HTTP Status', 'Content-Length', 'Output', 'Working'])
         for value in result:
@@ -129,11 +141,118 @@ def showOutput(type, result, outputFile):
 
     if outputFile is not None:
         table = table.get_html_string(attributes={"class":"OutputTable"})
-        table = '<link rel="stylesheet" href="style.css">' + table
+        table = '<h1>WAFNinja - Penetration testers favorite for WAF Bypassing</h1>' + '<b>URL</b>: ' + url + '<br>' + '<b>TYPE: </b>' + type + '<br>' + '<b>DELAY: </b>' + delay + '<br>' + '<b>PROXY: </b>' + proxy + '<br>' + '<b>PREFIX: </b>' + prefix + '<br>' + '<b>POSTFIX: </b>' + postfix + '<br><br>' + table
+        table = '''<meta charset="utf-8"/><style>
+        .OutputTable {
+	margin:0px;padding:0px;
+	width:100%;
+	border:1px solid #000000;
+	
+	-moz-border-radius-bottomleft:10px;
+	-webkit-border-bottom-left-radius:10px;
+	border-bottom-left-radius:10px;
+	
+	-moz-border-radius-bottomright:10px;
+	-webkit-border-bottom-right-radius:10px;
+	border-bottom-right-radius:10px;
+	
+	-moz-border-radius-topright:10px;
+	-webkit-border-top-right-radius:10px;
+	border-top-right-radius:10px;
+	
+	-moz-border-radius-topleft:10px;
+	-webkit-border-top-left-radius:10px;
+	border-top-left-radius:10px;
+	table-layout: fixed;
+        }.OutputTable table{
+            border-collapse: collapse;
+                border-spacing: 0;
+                width:310px;
+                height:100%;
+                margin:0px;padding:0px;
+        }.OutputTable tr:last-child td:last-child {
+                -moz-border-radius-bottomright:10px;
+                -webkit-border-bottom-right-radius:10px;
+                border-bottom-right-radius:10px;
+        }
+        .OutputTable table tr:first-child td:first-child {
+                -moz-border-radius-topleft:10px;
+                -webkit-border-top-left-radius:10px;
+                border-top-left-radius:10px;
+        }
+        .OutputTable table tr:first-child td:last-child {
+                -moz-border-radius-topright:10px;
+                -webkit-border-top-right-radius:10px;
+                border-top-right-radius:10px;
+        }.OutputTable tr:last-child td:first-child{
+                -moz-border-radius-bottomleft:10px;
+                -webkit-border-bottom-left-radius:10px;
+                border-bottom-left-radius:10px;
+        }.OutputTable tr:hover td{
+                background-color:#ffffff;
+        }
+        .OutputTable td{
+                vertical-align:middle;
+                background-color:#ffffff;
+                width:500px; 
+                word-wrap: break-word;
+            height: 15px;
+                border:1px solid #000000;
+                border-width:0px 1px 1px 0px;
+                text-align:center;
+                padding:9px;
+                font-size:15px;
+                font-family:Helvetica;
+                font-weight:normal;
+                color:#000000;
+        }.OutputTable tr:last-child td{
+                border-width:0px 1px 0px 0px;
+        }.OutputTable tr td:last-child{
+                border-width:0px 0px 1px 0px;
+        }.OutputTable tr:last-child td:last-child{
+                border-width:0px 0px 0px 0px;
+        }
+        .OutputTable tr:first-child th{
+                        background:-o-linear-gradient(bottom, #007fff 5%, #007fff 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #007fff), color-stop(1, #007fff) );
+                background:-moz-linear-gradient( center top, #007fff 5%, #007fff 100% );
+                filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#007fff", endColorstr="#007fff");	background: -o-linear-gradient(top,#007fff,007fff);
+
+                background-color:#007fff;
+                border:0px solid #000000;
+                text-align:center;
+                border-width:0px 0px 1px 1px;
+                font-size:15px;
+                font-family:Courier;
+                font-weight:bold;
+                color:#ffffff;
+        }
+        .OutputTable tr:first-child:hover td{
+                background:-o-linear-gradient(bottom, #007fff 5%, #007fff 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #007fff), color-stop(1, #007fff) );
+                background:-moz-linear-gradient( center top, #007fff 5%, #007fff 100% );
+                filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#007fff", endColorstr="#007fff");	background: -o-linear-gradient(top,#007fff,007fff);
+
+                background-color:#007fff;
+        }
+        .OutputTable tr:first-child td:first-child{
+                border-width:0px 0px 1px 0px;
+        }
+        .OutputTable tr:first-child td:last-child{
+                border-width:0px 0px 1px 1px;
+        }
+        .OutputTable td.Yes{
+                background-color:#00FF00;
+        }
+        .OutputTable td.No{
+                background-color:#FF0000;
+        }
+        .OutputTable td.Probably{
+                background-color:#00CCFF;
+        }
+            </style>''' + table
         table = table.replace('<td>Yes</td>', '<td class="Yes">Yes</td>')
         table = table.replace('<td>No</td>', '<td class="No">No</td>')
         table = table.replace('<td>Probably</td>', '<td class="Probably">Probably</td>')
-        file = open(outputFile,'w')
+        file = codecs.open(outputFile, 'w', encoding='utf-8')
         file.write(table) 
         file.close() 
         print 'Output saved to ' + outputFile + '!'

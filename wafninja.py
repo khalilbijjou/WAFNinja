@@ -50,21 +50,21 @@ arguments = getArguments()
 
 if arguments[0] == 'bypass':
     arguments.pop(0) # delete the string that indicates what function to use
-    url, post, cookie, type, delay, waf, outputFile = arguments
-    payload = getPayload(type, waf)
+    url, post, cookie, type, delay, waf, outputFile, proxy, prefix, postfix = arguments
+    payload = getPayload(type, waf) # get strings from db
     header = []
     setHeaders(cookie)
     post = extractParams(post)
-    firePayload(type, payload, url, post, header, delay, outputFile)
+    firePayload(type, payload, url, post, header, delay, outputFile, proxy, prefix, postfix)
         
 elif arguments[0] == 'fuzz':
-    arguments.pop(0)
-    url, post, cookie, type, delay, outputFile = arguments
-    fuzz = getFuzz(type)    
+    arguments.pop(0) # delete the string that indicates what function to use
+    url, post, cookie, type, delay, outputFile, proxy, prefix, postfix = arguments
+    fuzz = getFuzz(type) # get strings from db
     header = []
     setHeaders(cookie)
     post = extractParams(post)
-    fireFuzz(type, fuzz, url, post, header, delay, outputFile)
+    fireFuzz(type, fuzz, url, post, header, delay, outputFile, proxy, prefix, postfix)
         
 elif arguments[0] == 'insert-bypass':
     arguments.pop(0)

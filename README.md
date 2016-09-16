@@ -10,11 +10,12 @@ fuzzing strings, which are stored in a local database file come shipped with the
 supports HTTP connections, GET and POST requests and the use of Cookies in order to access
 pages restricted to authenticated users. Also, an intercepting proxy can be set up.
 
-usage: wafninja.py [-h] [-v]
-                   {fuzz, bypass, insert-fuzz, insert-bypass, set-db} ...
+Usage: 
+
+	wafninja.py [-h] [-v] {fuzz, bypass, insert-fuzz, insert-bypass, set-db} ...
 
     
-Example Usage:
+EXAMPLE:
 
 fuzz:
 	
@@ -45,4 +46,4 @@ positional arguments:
     -h, --help            show this help message and exit
     -v, --version         show program's version number and exit
 
-I would appreciate any feedback! Cheers, Khalil
+I would appreciate any feedback! Cheers, Khalil.

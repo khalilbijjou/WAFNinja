@@ -46,4 +46,10 @@ positional arguments:
     -h, --help            show this help message and exit
     -v, --version         show program's version number and exit
 
+Installation:
+	git clone https://github.com/khalilbijjou/WAFNinja && cd WAFNinja
+	pip install progressbar
+	pip install prettytable
+	python wafninja.py -h
+
 I would appreciate any feedback! Cheers, Khalil.

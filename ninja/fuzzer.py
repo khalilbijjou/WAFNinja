@@ -19,6 +19,7 @@ import copy
 import random
 import codecs
 import string
+import cgi
 from time import sleep
 from progressbar import *
 from prettytable import PrettyTable
@@ -139,8 +140,9 @@ def showOutput(type, url, result, outputFile, delay, proxy, prefix, postfix):
                 table.add_row([value['fuzz'], value['httpCode'], value['contentLength'], value['expected'], value['output'], 'Probably'])
 
     if outputFile is not None:
+        safeurl = cgi.escape(url)
         table = table.get_html_string(attributes={"class":"OutputTable"})
-        table = '<h1>WAFNinja - Penetration testers favorite for WAF Bypassing</h1>' + '<b>URL</b>: ' + url + '<br>' + '<b>TYPE: </b>' + type + '<br>' + '<b>DELAY: </b>' + str(delay) + '<br>' + '<b>PROXY: </b>' + proxy + '<br>' + '<b>PREFIX: </b>' + prefix + '<br>' + '<b>POSTFIX: </b>' + postfix + '<br><br>' + table
+        table = '<h1>WAFNinja - Penetration testers favorite for WAF Bypassing</h1>' + '<b>URL</b>: ' + safeurl + '<br>' + '<b>TYPE: </b>' + type + '<br>' + '<b>DELAY: </b>' + str(delay) + '<br>' + '<b>PROXY: </b>' + proxy + '<br>' + '<b>PREFIX: </b>' + prefix + '<br>' + '<b>POSTFIX: </b>' + postfix + '<br><br>' + table
         table = '''<meta charset="utf-8"/><style>
         .OutputTable {
 	margin:0px;padding:0px;

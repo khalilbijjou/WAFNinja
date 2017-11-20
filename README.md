@@ -10,6 +10,12 @@ fuzzing strings, which are stored in a local database file come shipped with the
 supports HTTP connections, GET and POST requests and the use of Cookies in order to access
 pages restricted to authenticated users. Also, an intercepting proxy can be set up.
 
+Installation:
+
+	git clone https://github.com/khalilbijjou/WAFNinja && cd WAFNinja
+	pip install progressbar
+	pip install prettytable
+	
 Usage: 
 
 	wafninja.py [-h] [-v] {fuzz, bypass, insert-fuzz, insert-bypass, set-db} ...
@@ -46,11 +52,5 @@ positional arguments:
     -h, --help            show this help message and exit
     -v, --version         show program's version number and exit
 
-Installation:
-
-	git clone https://github.com/khalilbijjou/WAFNinja && cd WAFNinja
-	pip install progressbar
-	pip install prettytable
-	python wafninja.py -h
 
 I would appreciate any feedback! Cheers, Khalil.

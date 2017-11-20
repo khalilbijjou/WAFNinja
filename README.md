@@ -47,6 +47,7 @@ positional arguments:
     -v, --version         show program's version number and exit
 
 Installation:
+
 	git clone https://github.com/khalilbijjou/WAFNinja && cd WAFNinja
 	pip install progressbar
 	pip install prettytable

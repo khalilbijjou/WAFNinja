@@ -13,8 +13,7 @@ pages restricted to authenticated users. Also, an intercepting proxy can be set 
 Installation:
 
 	git clone https://github.com/khalilbijjou/WAFNinja && cd WAFNinja
-	pip install progressbar
-	pip install prettytable
+	pip install -r requirements.txt
 	
 Usage: 
 
